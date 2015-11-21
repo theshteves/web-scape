@@ -39,3 +39,16 @@ body{
 	position: absolute;
 	right: 0;
 }
+canvas {
+    position: absolute;
+}
+h1 {
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 40pt;
+}
+span {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+}
