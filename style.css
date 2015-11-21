@@ -1,0 +1,33 @@
+body{
+	margin: 0 auto;
+	background-color: #FF9900;
+}
+
+#sidebar{
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	width: 20%;
+	height: calc(100% - 40px);
+	margin: 20px;
+	border-radius: 25px;
+	opacity: 0.4;
+	position: absolute;
+	left: 0;
+	background-color: white;
+}
+
+.sample{
+	display: -webkit-flex;
+	display: flex;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+#render{
+	height: 100%;
+	width: 80%;
+	position: absolute;
+	right: 0;
+}
