@@ -1,6 +1,6 @@
 body{
 	margin: 0 auto;
-	background-color: #FF9900;
+	background-color: #110923;
 }
 
 #sidebar{
@@ -8,26 +8,34 @@ body{
 	display: flex;
 	-webkit-flex-direction: column;
 	flex-direction: column;
-	width: 20%;
-	height: calc(100% - 40px);
-	margin: 20px;
-	border-radius: 25px;
+	width: 25%;
+	height: 100%;
+	padding: 5px 0;
 	opacity: 0.4;
 	position: absolute;
 	left: 0;
-	background-color: white;
+	opacity: 0.7;
+	background-color: black;
 }
 
-.sample{
+.button{
 	display: -webkit-flex;
 	display: flex;
 	-webkit-justify-content: center;
 	justify-content: center;
+	padding: 10px;
+	border-radius: 25px;
+	color: white;
+	background-color: black;
+}
+
+.button>a{
+	color: white;
 }
 
 #render{
 	height: 100%;
-	width: 80%;
+	width: 75%;
 	position: absolute;
 	right: 0;
 }
