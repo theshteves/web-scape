@@ -13,7 +13,7 @@ function searchInit(event){
 
 function searchPost(event){
 	var site = $('.searchbar2').val();
-
+	$('.searchbar2').val("");
 	$(".c-hamburger").toggleClass('is-active ham-trans');
 	$( "#sidebar" ).toggleClass('show-thing');
 	event.preventDefault();
