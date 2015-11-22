@@ -151,6 +151,9 @@ $(document).ready(function() {
 	//scene.add( particleCube );
 
 
+
+    /* ------------------------------------------*/
+
 	var NODES = []; // { "url": [["url", "url", ...] , id] };
 
 
@@ -166,36 +169,73 @@ $(document).ready(function() {
 	    scene.add(line);
 	}
 
-
+    graph = {}
 
 	function addNode(url, links) {
 
 	    var n = NODES.length;
-	    NODES.push([n, url, links]);
 	    var material = new THREE.ShaderMaterial( {
 		uniforms: uniforms1,
 		vertexShader: document.getElementById('vertexShader').textContent,
 		fragmentShader: document.getElementById("fragment_shader3").textContent
 	    });
+        if(! graph[url] )
+        {
+            NODES.push([n, url, links]);
             var mesh = new THREE.Mesh( GEOMETRY, material );
-	    mesh.position.x = (100-5*n)*Math.cos(n*Math.PI/4);
-	    mesh.position.y = (100-5*n)*Math.sin(n*Math.PI/4);
-	    mesh.position.z = 10*n;
-	    scene.add( mesh );
+            mesh.position.x = (100-5*n)*Math.cos(n*Math.PI/4);
+            mesh.position.y = (100-5*n)*Math.sin(n*Math.PI/4);
+            mesh.position.z = 10*n;
+            scene.add( mesh );
+            graph[url] = [mesh, n, links];
+        }
+        graph[url][2] = links;
+        
 
-	    for (var j = 1; j < links.length; j++) {
-		addLink(n, links[j]);//links[j]);
-		//addLink(n, n + 1);//links[j]);
-	    }
+	    //for (var j = 1; j < links.length; j++) {
+        //    addLink(n, links[j]);//links[j]);
+		////addLink(n, n + 1);//links[j]);
+	    //}
 	}
 
+    waitQueue = {};
 
-	for (var a = 0; a < 16; a++) {
+    requestUrl(url){
+        socket.emit("res", {'url': url});
+        waitQueue[url] = true;
+    }
 
-            addNode("google.com", [9, 8]);
-	}
+    socket.on('results', function(msg) {
+        if (msg == null)
+        {
+            return;
+        }
+        url = Object.keys(msg)[0]
+        links = msg[url];
+        delete waitQueue[url];
+        addNode(url, links);
+        for(var i in links)
+        {
+            requestUrl(links[i]);
+        }
+        for( var i in links)
+        {
+            addLink(graph[url][0], graph[links[i]][0]);
+        }
+    });
 
-	var material = new THREE.MeshPhongMaterial({color: 0x00ff00, reflectivity: .1, emissive: 0xff0000});
+
+	//for (var a = 0; a < 16; a++) {
+
+    //        addNode("google.com", [9, 8]);
+	//}
+
+
+    /* ---------------------------------------- */
+
+
+
+    var material = new THREE.MeshPhongMaterial({color: 0x00ff00, reflectivity: .1, emissive: 0xff0000});
 	var mesh = new THREE.Mesh(GEOMETRY, material);
 	mesh.position.x = 0;
 	mesh.position.y = 0;
