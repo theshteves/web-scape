@@ -1,154 +1,186 @@
 $(document).ready(function() {
 
-    uniforms1 = {
-	time: { type: "f", value: 1.0 },
-	resolution: { type: "v2", value: new THREE.Vector2() }
-    };
 
+    lightShaderData = {
+	"vertex":[
 
+	],
+	"frag": [
 
-    /* --- Global Variables --- */
-    var container, stats;
-    var camera, controls, scene, renderer;
-    var cross;
+	]
+    }
 
+    window.shaders = {}
 
-    /* --- Main Event Loop --- */
-    var clock = new THREE.Clock();
-    var RENDER = new THREE.WebGLRenderer({antialias: true, autoClearFocus: false, alpha: true});
-    var GEOMETRY = new THREE.SphereGeometry(8, 8, 8);
-    init();
-    animate();
+    function NewOrb(radius, segments, rings){
+	newOrb = new Orb();
+	return newOrb.init(radius, segments, rings);
+    }
 
+    function Orb(){
+	this.type = "orb";
+    }
 
-    /* --- Init --- */
-    function init() {
-	camera = new THREE.PerspectiveCamera(60, $("#render").width() / window.innerHeight, 1, 1000);
-	camera.position.x = 25;
-	camera.position.y = 50;
-	camera.position.z = 400;
+    Orb.prototype.init = function(radius, segments, rings){
+	var self = this;
+	self.waterTexture = new THREE.ImageUtils.loadTexture( '/Users/kneiser/Desktop/code/bring-it/lava.jpg' );
+	self.waterTexture.wrapS = self.waterTexture.wrapT = THREE.RepeatWrapping;
+	self.noiseTexture = new THREE.ImageUtils.loadTexture( '/Users/kneiser/Desktop/code/bring-it/lava.jpg' );
+	var bumpTexture = self.noiseTexture;
+	bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
 
-	controls = new THREE.OrbitControls(camera, document.getElementById("render"));
-	controls.addEventListener('change', render);
+	//self.uniforms = {
+	//    baseTexture:    { type: "t", value: self.waterTexture },
+	//    baseSpeed:      { type: "f", value: .15 },
+	//    noiseTexture:   { type: "t", value: self.noiseTexture },
+	//    noiseScale:     { type: "f", value: 20 },
+	//    alpha:          { type: "f", value: 1 },
+	//    time:           { type: "f", value: 1.0 }
+	//};
+	var repeatS = repeatT = 4.0;
+	self.uniforms = {
+	    baseTexture:    { type: "t", value: self.waterTexture },
+	    baseSpeed:      { type: "f", value: .2 },
+	    repeatS:        { type: "f", value: repeatS },
+	    repeatT:        { type: "f", value: repeatT },
+	    noiseTexture:   { type: "t", value: self.noiseTexture },
+	    noiseScale:     { type: "f", value: .5 },
+	    blendTexture:   { type: "t", value: self.waterTexture },
+	    blendSpeed:     { type: "f", value: .01 },
+	    blendOffset:    { type: "f", value: .25 },
+	    bumpTexture:    { type: "t", value: bumpTexture },
+	    bumpSpeed:      { type: "f", value: 1.15 },
+	    bumpScale:      { type: "f", value: 140.0 },
+	    alpha:          { type: "f", value: 1.0 },
+	    time:           { type: "f", value: 1.0 }
+	};
 
-	scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.002);
-
-	var params = [
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ]
-	];
-
-	for( var i = 0; i < params.length; i++ ) {
-
-	    var material = new THREE.ShaderMaterial( {
-
-		uniforms: params[ i ][ 1 ],
-		vertexShader: document.getElementById('vertexShader').textContent,
-		fragmentShader: document.getElementById( params[ i ][ 0 ] ).textContent
-
-	    });
-
-	    var mesh = new THREE.Mesh( GEOMETRY, material );
-	    mesh.position.x = 20*Math.cos(i*Math.PI/4);
-	    mesh.position.y = 20*Math.sin(i*Math.PI/4);
-	    mesh.position.z = 5*i;
-	    scene.add( mesh );
-
-	}
-
-	var material = new THREE.MeshPhongMaterial({color: 0x00ff00, reflectivity: .1, emissive: 0xff0000});
-	var mesh = new THREE.Mesh(GEOMETRY, material);
-	mesh.position.x = 0;
-	mesh.position.y = 0;
-	mesh.position.z = 0;
-	//mesh.rotation.x = eval(WHAT);
-	mesh.updateMatrix();
-	mesh.matrixAutoUpdate = false;
-	//scene.add(mesh);
-
-	light = new THREE.DirectionalLight(0x00ffff, 100);
-	light.position.set(50, 100, 50);
-	scene.add(light);
-
-	light = new THREE.DirectionalLight(0x00ff00, 100);
-	light.position.set(0, 50, 100);
-	scene.add(light);
-
-	light = new THREE.AmbientLight(0xffAA11);
-	scene.add(light);
-
-	renderer = RENDER;
-	renderer.setClearColor(0x000000, 0); //scene.fog.color
-	renderer.setSize($("#render").width(), window.innerHeight);
-	$("#canvas").replaceWith(renderer.domElement);
-
-	$("#render").on('resize', function() {
-	    camera.aspect = $("#render").width() / window.innerHeight;
-	    camera.updateProjectionMatrix();
-
-	    renderer.setSize($("#render").width(), window.innerHeight);
-	    render();
+	self._updateMaterial();
+	//self.geom = new THREE.PlaneGeometry(radius, radius);
+	self.geom = new THREE.SphereGeometry(radius, segments, rings);
+	self.mesh = new THREE.Mesh(self.geom, self.material);
+	$(document).on("animation", function(e, clock){
+	    self.OnAnimation(e, clock);
 	});
+	return self;
     }
 
-
-    /* --- OnWindowResize --- */
-    function onWindowResize( event ) {
-
-	uniforms1.resolution.value.x = window.innerWidth;
-	uniforms1.resolution.value.y = window.innerHeight;
-
-	uniforms2.resolution.value.x = window.innerWidth;
-	uniforms2.resolution.value.y = window.innerHeight;
-
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-
-	renderer.setSize(window.innerWidth, window.innerHeight);
-
+    Orb.prototype.OnAnimation = function(e, clock){
+	var self = this;
+	var newTime = self.uniforms.time.value + clock.getDelta() * 5;
+	self.uniforms.time.value = newTime;
+	//console.log(self.uniforms.time.value);
     }
 
-
-    /* --- Animate --- */
-    function animate() {
-	render();
-	requestAnimationFrame(animate);
-	controls.update();
+    Orb.prototype._updateMaterial = function(){
+	var self = this;
+	self.material = new THREE.ShaderMaterial({
+	    uniforms:self.uniforms,
+	    fragmentShader : $("#fragmentShader").text(),
+	    vertexShader : $("#vertexShader").text()
+	});
+	self.material.side = THREE.DoubleSide;
+	//self.material.transparent = true;
     }
 
+    /* ------------------------------------------------------------------------------- */
 
-    /* --- Render --- */
-    function render() {
 
+    // set the scene size
+    var clock = new THREE.Clock();
+    window.time = 0;
+    var WIDTH = $(document).width(),
+	HEIGHT = $(document).height();
+
+    // set some camera attributes
+    var VIEW_ANGLE = 45,
+	ASPECT = WIDTH / HEIGHT,
+	NEAR = 0.1,
+	FAR = 10000;
+
+    // get the DOM element to attach to
+    // - assume we've got jQuery to hand
+    var $container = $('#container');
+
+    // create a WebGL renderer, camera
+    // and a scene
+    var renderer = new THREE.WebGLRenderer();
+    var camera =
+	new THREE.PerspectiveCamera(
+	    VIEW_ANGLE,
+	    ASPECT,
+	    NEAR,
+	    FAR);
+
+    var scene = new THREE.Scene();
+
+    // add the camera to the scene
+    scene.add(camera);
+
+    // the camera starts at 0,0,0
+    // so pull it back
+    camera.position.y = 10;
+    camera.rotation.set(.03, 0, 0);
+    camera.position.z = 300;
+
+    // start the renderer
+    renderer.setSize(WIDTH, HEIGHT);
+
+    // attach the render-supplied DOM element
+    $container.append(renderer.domElement);
+
+
+    var radius = 50,
+	segments = 32,
+	rings = 16;
+
+    var orb = NewOrb(radius, segments, rings);
+
+    // create a new mesh with
+    // sphere geometry - we will cover
+    // the sphereMaterial next!
+
+    // add the sphere to the scene
+    scene.add(orb.mesh);
+
+    // create a point light
+    var pointLight =
+	new THREE.PointLight(0xFFFFFF);
+
+    // set its position
+    pointLight.position.x = 10;
+    pointLight.position.y = 50;
+    pointLight.position.z = 130;
+
+    // add to the scene
+    scene.add(pointLight);
+
+    // draw!
+    renderer.render(scene, camera);
+    function onAnim(){
 	var delta = clock.getDelta();
-	uniforms1.time.value += delta * 5;
-	/*
-	for (var i = 0; i < scene.children.length; i++) {
-
-	    var object = scene.children[ i ];
-
-	    object.rotation.y += delta * 0.5 * ( i % 2 ? 1 : -1 ) + i / 256;
-	    object.rotation.x += delta * 0.5 * ( i % 2 ? -1 : 1 ) - i / 512;
-
-	}
-	*/
-	renderer.render( scene, camera );
+	renderer.render(scene, camera);
+	$(document).trigger("animation", [clock]);
     }
+
+    window.requestAnimFrame = (function(){
+	return  window.requestAnimationFrame       ||
+	    window.webkitRequestAnimationFrame ||
+	    window.mozRequestAnimationFrame    ||
+	    function( callback ){
+		window.setTimeout(callback, 1000 / 30);
+	    };
+    })();
+
+
+    // usage:
+    // instead of setInterval(render, 16) ....
+
+    (function animloop(){
+	requestAnimFrame(animloop)
+	onAnim();
+    })();
+    // place the rAF *before* the render() to assure as close to
+    // 60fps with the setTimeout fallback.
+
 });
