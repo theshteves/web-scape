@@ -92,6 +92,16 @@ input,
    	line-height: 1.25;
 }
 
+input,
+::-moz-placeholder {
+	opacity: 1;
+	margin-left: 12px;
+	font-family: "Montserrat", sans-serif;
+   	color: white;
+   	font-size: 18px;
+   	line-height: 1.25;
+}
+
 input:focus {outline: none; }
 
 .search>i{
@@ -107,6 +117,11 @@ input:focus {outline: none; }
 	width: 100%;
 	position: absolute;
 	right: 0;
+}
+
+#buttonWrapper{
+	position: absolute;
+	background-color: transparent;
 }
 
 canvas {
@@ -130,6 +145,7 @@ p{
 
 #imgWrapper{
 	max-width: calc(100% - 34px);
+	margin: auto;
 }
 
 #imgWrapper>img{

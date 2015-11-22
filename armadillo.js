@@ -3,8 +3,8 @@ $(".c-hamburger").click(function(event) {
 	$( "#sidebar" ).toggleClass('show-thing');
 });
 
-function search(event){
-	event.preventDefault();
+function search(){
+	
 	$('#welcome').fadeOut('100');
 	$('.c-hamburger').css('visibility', 'visible').hide().fadeIn('100');
 }

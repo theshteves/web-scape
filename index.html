@@ -194,10 +194,17 @@ void main()
       <p>Welcome</p>
       <form role="form" class="search" onsubmit="search()">
         <i class="fa fa-search"></i>
-        <input type="search" class="form-control searchbar" placeholder="Search">
+        <input type="search" class="form-control searchbar" placeholder="Enter a url to begin">
         <input type="submit" class="submit">
       </form>
     </div>
+
+    <div id="buttonWrapper">
+      <button class="c-hamburger c-hamburger--htla">
+        <span>toggle menu</span>
+      </button>
+    </div>
+
     <div id="sidebar">
       
       <h1>WEB<span id="scape">scape</span></h1>
@@ -209,23 +216,16 @@ void main()
       </form>
 
       <section class="site-info">
-        <div id="imgWrapper">
-          <iframe src="http://webcache.googleusercontent.com/search?q=cache:google.com"></iframe>
-        </div>
-        <h2 id="title">Wikipedia.com</h2>        
-      
+        <!-- <div id="imgWrapper">
+          <iframe src="http://msu.edu"></iframe>
+        </div> -->
+        <h2 id="title">Wikipedia.com</h2>
+        <p>Wikipedia sux armadildos</p>
       </section>
-
     </div>
 
     <div id="render">
-      <div>
 
-        <button class="c-hamburger c-hamburger--htla">
-          <span>toggle menu</span>
-        </button>
-
-      </div>
       <canvas id="canvas"></canvas>
     </div>
     <script src="armadillo.js"></script>
