@@ -193,7 +193,7 @@ void main()
   <audio autoplay><source src="./TheCliff.mp3" type="audio/mpeg"></audio>
     <div id="welcome">
       <p>Welcome</p>
-      <form role="form" class="search" onsubmit="search()">
+      <form role="form" class="search" onsubmit="searchInit()">
         <i class="fa fa-search"></i>
         <input type="search" class="form-control searchbar" placeholder="Enter a url to begin">
         <input type="submit" class="submit">
@@ -210,7 +210,7 @@ void main()
       
       <h1>WEB<span id="scape">scape</span></h1>
       
-      <form role="form" class="search">
+      <form role="form" class="search" onsubmit="searchPost()">
       	<i class="fa fa-search"></i>
       	<input type="search" class="form-control searchbar" placeholder="Search">
         <input type="submit" class="submit">
@@ -222,6 +222,7 @@ void main()
         </div> -->
         <h2 id="title">Wikipedia.com</h2>
         <p>Wikipedia sux armadildos</p>
+        <p>Number of connections: ##</p>
       </section>
     </div>
 
