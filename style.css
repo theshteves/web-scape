@@ -30,7 +30,7 @@ body{
 	border: solid white 2px;
 	border-radius: 25px;
 	text-align: center;
-	min-width: 150px;
+	width: calc(80% - 34px);
 	max-height: 50px;
 	color: white;
 	background: transparent;
@@ -52,7 +52,7 @@ input,
 input:focus {outline: none; }
 
 #search>i{
-	margin: auto;
+	margin: auto 0;
 }
 
 #render{
@@ -60,4 +60,17 @@ input:focus {outline: none; }
 	width: 75%;
 	position: absolute;
 	right: 0;
+}
+canvas {
+    position: absolute;
+}
+h1 {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 40pt;
+}
+span {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
 }
