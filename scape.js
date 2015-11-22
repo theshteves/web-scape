@@ -1,6 +1,11 @@
 $(document).ready(function() {
 
-
+    /*
+    var myImage = new Image();
+    myImage.src = "/Users/kneiser/Desktop/code/bring-it/lava.jpg";
+    THREE.ImageUtils.crossOrigin = '';
+    var mapOverlay = THREE.ImageUtils.loadTexture("/Users/kneiser/Desktop/code/bring-it/lava.jpg");
+    */
     lightShaderData = {
 	"vertex":[
 
@@ -23,9 +28,9 @@ $(document).ready(function() {
 
     Orb.prototype.init = function(radius, segments, rings){
 	var self = this;
-	self.waterTexture = new THREE.ImageUtils.loadTexture( '/Users/kneiser/Desktop/code/bring-it/lava.jpg' );
+	self.waterTexture = new THREE.ImageUtils.loadTexture("/Users/kneiser/Desktop/code/bring-it/lava.jpg");
 	self.waterTexture.wrapS = self.waterTexture.wrapT = THREE.RepeatWrapping;
-	self.noiseTexture = new THREE.ImageUtils.loadTexture( '/Users/kneiser/Desktop/code/bring-it/lava.jpg' );
+	self.noiseTexture = new THREE.ImageUtils.loadTexture("/Users/kneiser/Desktop/code/bring-it/lava.jpg");
 	var bumpTexture = self.noiseTexture;
 	bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
 
