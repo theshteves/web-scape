@@ -26,6 +26,7 @@ body{
 #welcome .search{
 	width: 600px;
 	margin: auto;
+	-webkit-backdrop-filter: blur(10px);
 }
 
 #sidebar{
