@@ -18,7 +18,7 @@ body{
 	left: 0;
 	background-color: rgba(122,53,48,1);
 	opacity: .3;
-
+	z-index: 999;
 }
 
 .active {
@@ -65,7 +65,7 @@ input:focus {outline: none; }
 
 #render{
 	height: 90%;
-	width: 75%;
+	width: 100%;
 	position: absolute;
 	right: 0;
 }

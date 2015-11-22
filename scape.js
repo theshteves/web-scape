@@ -15,7 +15,7 @@ $(document).ready(function() {
 
     /* --- Main Event Loop --- */
     var clock = new THREE.Clock();
-    var RENDER = new THREE.WebGLRenderer({antialias: true, autoClearFocus: false});
+    var RENDER = new THREE.WebGLRenderer({antialias: true, autoClearFocus: false, alpha: true});
     var GEOMETRY = new THREE.SphereGeometry(8, 8, 8);
     init();
     animate();
@@ -95,7 +95,7 @@ $(document).ready(function() {
 	scene.add(light);
 
 	renderer = RENDER;
-	renderer.setClearColor(0x333333, 1); //scene.fog.color
+	renderer.setClearColor(0x000000, 0); //scene.fog.color
 	renderer.setSize($("#render").width(), window.innerHeight);
 	$("#canvas").replaceWith(renderer.domElement);
 
