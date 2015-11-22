@@ -12,7 +12,6 @@ function searchInit(event){
 }
 
 function searchPost(event){
-	event.preventDefault();
 	var site = $('.searchbar2').val();
 	$('.searchbar2').val("");
 	$(".c-hamburger").toggleClass('is-active ham-trans');
