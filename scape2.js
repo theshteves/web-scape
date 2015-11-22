@@ -16,7 +16,6 @@ $(document).ready(function() {
     /* --- Main Event Loop --- */
     var clock = new THREE.Clock();
     var RENDER = new THREE.WebGLRenderer({antialias: true, autoClearFocus: false});
-    var GEOMETRY = new THREE.SphereGeometry(8, 8, 8);
     init();
     animate();
 
@@ -151,9 +150,9 @@ $(document).ready(function() {
     //scene.add( particleCube ); 
 
 
-    var NODES = [];
+    var NODES = {}; // { "url": ["url", "url", ...] , id] };
 
-    function addLink(a, b) {
+    function connect(a, b) {
         
         var lineGeometry = new THREE.Geometry();
         var vertArray = lineGeometry.vertices;
@@ -167,33 +166,55 @@ $(document).ready(function() {
 
 
 
-    function addNode(url, links) {
+    function addNode(url, id, links) {
 
-        var n = NODES.length;
-        NODES.push([n, url, links]);
         var material = new THREE.ShaderMaterial( {
             uniforms: uniforms1,
             vertexShader: document.getElementById('vertexShader').textContent,
             fragmentShader: document.getElementById("fragment_shader3").textContent
         });
+        
+        var GEOMETRY = new THREE.SphereGeometry(4*links.length, 4*links.length, 4*links.length);
+        var mesh = new THREE.Mesh(GEOMETRY, material);
+        mesh.position.x = (100-5*id)*Math.cos(id*Math.PI/4);
+        mesh.position.y = (100-5*id)*Math.sin(id*Math.PI/4);
+        mesh.position.z = 10*id;
+        scene.add(mesh);
 
-        var mesh = new THREE.Mesh( GEOMETRY, material );
-        mesh.position.x = (100-5*n)*Math.cos(n*Math.PI/4);
-        mesh.position.y = (100-5*n)*Math.sin(n*Math.PI/4);
-        mesh.position.z = 10*n;
-        scene.add( mesh );
-
-        for (var j = 1; j < links.length; j++) {
-            addLink(n, links[j]);//links[j]);
+        //for (var j = 1; j < links.length; j++) {
+            //connect(n, links[j]);//links[j]);
             //addLink(n, n + 1);//links[j]);
-        }
+        //}
     }
 
 
+    function addUrl(url) {
+        //url =  {url: [url1, ..., url3] }
+        var L = url[1].length;
+        if (Object.keys(url)[0] in NODES) {
+            // Check for new leafs
+            for (var k = 0; k < L; k++) {
+                for (var m = 0; m < NODES[Object.keys(url)[0]]) {
+                    if (url[1][k] != -1) {
 
+
+                    } else {
+
+
+                    }
+                }
+            }
+        } else {
+            //
+
+
+        }
+    }
+
+    
     for (var i = 0; i < 16; i++) {
 
-        addNode("google.com", [14, 15]);
+        addNode("google.com", [9, 8]);
 	}
 
 	var material = new THREE.MeshPhongMaterial({color: 0x00ff00, reflectivity: .1, emissive: 0xff0000});
