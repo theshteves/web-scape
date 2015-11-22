@@ -24,9 +24,9 @@ $(document).ready(function() {
     /* --- Init --- */
     function init() {
 	camera = new THREE.PerspectiveCamera(60, $("#render").width() / window.innerHeight, 1, 1000);
-	camera.position.x = 25;
-	camera.position.y = 50;
-	camera.position.z = 400;
+	camera.position.x = 175;
+	camera.position.y = 40;
+	camera.position.z = 75;
 
 	controls = new THREE.OrbitControls(camera, document.getElementById("render"));
 	controls.addEventListener('change', render);
