@@ -34,28 +34,8 @@ $(document).ready(function() {
 	scene = new THREE.Scene();
 	scene.fog = new THREE.FogExp2(0x000000, 0.002);
 
-	var params = [
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ],
-	    [ 'fragment_shader3', uniforms1 ]
-	];
+    /**/
 
-	
     var lavaTexture = new THREE.ImageUtils.loadTexture( './lava.jpg');
     lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping; 
     // multiplier for distortion speed      
@@ -83,7 +63,7 @@ $(document).ready(function() {
     // multiplier for distortion speed      
     var bumpSpeed   = 0.002;
     // magnitude of normal displacement
-    var bumpScale   = 3.0;
+    var bumpScale   = 5.0;
     
     // use "this." to create global object
     this.customUniforms = {
@@ -112,27 +92,108 @@ $(document).ready(function() {
         fragmentShader: document.getElementById( 'fragment_shader3' ).textContent
     }   );
         
-    var ballGeometry = new THREE.SphereGeometry(8, 8, 8);
+    var ballGeometry = new THREE.SphereGeometry(1, 1, 1);
     var ball = new THREE.Mesh(  ballGeometry, customMaterial );
-    ball.position.set(0, 65, 160);
+    ball.position.set(0, 0, 0);
     scene.add( ball );
 
-    for (var i = 0; i < params.length; i++) {
 
-	    var material = new THREE.ShaderMaterial( {
 
-		uniforms: params[ i ][ 1 ],
-		vertexShader: document.getElementById('vertexShader').textContent,
-		fragmentShader: document.getElementById( params[ i ][ 0 ] ).textContent
+    this.particleGeometry = new THREE.Geometry();
+    for (var i = 0; i < 100; i++)
+        particleGeometry.vertices.push( new THREE.Vector3(0,0,0) );
+    
+    var discTexture = THREE.ImageUtils.loadTexture( 'images/disc.png' );
+    
+    // properties that may vary from particle to particle. 
+    // these values can only be accessed in vertex shaders! 
+    //  (pass info to fragment shader via vColor.)
+    this.attributes = 
+    {
+        customColor:     { type: 'c',  value: [] },
+        customOffset:    { type: 'f',  value: [] },
+    };
+    
+    var particleCount = particleGeometry.vertices.length
+    for( var v = 0; v < particleCount; v++ ) 
+    {
+        attributes.customColor.value[ v ] = new THREE.Color().setHSL( 1 - v / particleCount, 1.0, 0.5 );
+        attributes.customOffset.value[ v ] = 6.282 * (v / particleCount); // not really used in shaders, move elsewhere
+    }
+    
+    // values that are constant for all particles during a draw call
+    this.uniforms = 
+    {
+        time:      { type: "f", value: 1.0 },
+        texture:   { type: "t", value: discTexture },
+    };
 
-	    });
+    var shaderMaterial = new THREE.ShaderMaterial( 
+    {
+        uniforms:       uniforms,
+        attributes:     attributes,
+        vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+        transparent: true, // alphaTest: 0.5,  // if having transparency issues, try including: alphaTest: 0.5, 
+        // blending: THREE.AdditiveBlending, depthTest: false,
+        // I guess you don't need to do a depth test if you are alpha blending
+        // 
+    });
+    
+    var particleCube = new THREE.ParticleSystem( particleGeometry, shaderMaterial );
+    particleCube.position.set(0, 85, 0);
+    particleCube.dynamic = true;
+    // in order for transparency to work correctly, we need sortParticles = true.
+    //  but this won't work if we calculate positions in vertex shader,
+    //  so positions need to be calculated in the update function,
+    //  and set in the geometry.vertices array
+    particleCube.sortParticles = true;
+    //scene.add( particleCube ); 
 
-	    var mesh = new THREE.Mesh( GEOMETRY, material );
-	    mesh.position.x = 40*Math.cos(i*Math.PI/4);
-	    mesh.position.y = 40*Math.sin(i*Math.PI/4);
-	    mesh.position.z = 10*i;
-	    scene.add( mesh );
 
+    var NODES = [];
+
+    function addLink(a, b) {
+        
+        var lineGeometry = new THREE.Geometry();
+        var vertArray = lineGeometry.vertices;
+        vertArray.push( new THREE.Vector3((100-5*a)*Math.cos(a*Math.PI/4), (100-5*a)*Math.sin(a*Math.PI/4), 10*a), 
+                        new THREE.Vector3((100-5*b)*Math.cos(b*Math.PI/4), (100-5*b)*Math.sin(b*Math.PI/4), 10*b) );
+        lineGeometry.computeLineDistances();
+        var lineMaterial = new THREE.LineBasicMaterial( { color: 0xffffff } );
+        var line = new THREE.Line( lineGeometry, lineMaterial );
+        scene.add(line);
+    }
+
+
+
+    function addNode(url, links) {
+
+        var n = NODES.length;
+        NODES.push([n, url, links]);
+        var material = new THREE.ShaderMaterial( {
+            uniforms: uniforms1,
+            vertexShader: document.getElementById('vertexShader').textContent,
+            fragmentShader: document.getElementById("fragment_shader3").textContent
+        });
+
+        var mesh = new THREE.Mesh( GEOMETRY, material );
+        mesh.position.x = (100-5*n)*Math.cos(n*Math.PI/4);
+        mesh.position.y = (100-5*n)*Math.sin(n*Math.PI/4);
+        mesh.position.z = 10*n;
+        scene.add( mesh );
+
+        for (var j = 1; j < links.length; j++) {
+            addLink(n, links[j]);//links[j]);
+            //addLink(n, n + 1);//links[j]);
+        }
+    }
+
+
+
+    for (var i = 0; i < 16; i++) {
+
+        addNode("google.com", [14, 15]);
 	}
 
 	var material = new THREE.MeshPhongMaterial({color: 0x00ff00, reflectivity: .1, emissive: 0xff0000});
@@ -144,8 +205,8 @@ $(document).ready(function() {
 	mesh.updateMatrix();
 	mesh.matrixAutoUpdate = false;
 	//scene.add(mesh);
-
-	light = new THREE.DirectionalLight(0x00ffff, 100);
+    
+    light = new THREE.DirectionalLight(0x00ffff, 100);
 	light.position.set(50, 100, 50);
 	scene.add(light);
 
