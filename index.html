@@ -49,20 +49,32 @@
   </head>
   <body>
     <div id="sidebar">
-      <h1>WEB<span>scape</span></h1>
+      
+      <h1>WEB<span id="scape">scape</span></h1>
+      
       <form role="form" id="search">
       	<i class="fa fa-search"></i>
       	<input type="search" class="form-control" id="searchbar" placeholder="Search">
       </form>
-      <!--     <div id="imgWrapper">
-        <embed src="http://webcache.googleusercontent.com/search?q=cache:google.com"></embed>
-      </div> -->
-      <div id="title">
-        <p>wikipedia.com</p>
-      </div>
+
+      <section class="site-info">
+<!--    <div id="imgWrapper">
+          <embed src="http://webcache.googleusercontent.com/search?q=cache:google.com"></embed>
+        </div> -->
+        <h2 id="title">Wikipedia.com</h2>        
+      
+      </section>
+
     </div>
 
     <div id="render">
+      <div>
+
+        <button class="c-hamburger c-hamburger--htla">
+          <span>toggle menu</span>
+        </button>
+
+      </div>
       <canvas id="canvas"></canvas>
     </div>
 
