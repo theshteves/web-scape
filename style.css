@@ -276,5 +276,7 @@ p{
 
 #title {
 	text-transform: uppercase;
-	border-bottom: 2px solid white;
+	font-size: 16px;
+    border-bottom: 2px solid white;
+
 }
