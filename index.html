@@ -1,29 +1,62 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WebScape</title>
+    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,700" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/threejs/r69/three.min.js"></script>
+    <script src="https://dl.dropboxusercontent.com/u/3587259/Code/Threejs/OrbitControls.js"></script>
+    <script id="fragment_shader3" type="x-shader/x-fragment">
 
-	<title>WebScape</title>
+      uniform float time;
+      uniform vec2 resolution;
 
-	<link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Oswald:300,400,700' rel='stylesheet' type='text/css'>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/threejs/r69/three.min.js"></script>
-  <script src="https://dl.dropboxusercontent.com/u/3587259/Code/Threejs/OrbitControls.js"></script>
-	<script src="scape.js"></script>
-</head>
+      varying vec2 vUv;
 
-<body>
-	<div id="sidebar">
-    <h1>WEB<span>scape</span></h1>
-		<form role="form" id="search">
-			<i class="fa fa-search"></i>
-			<input type="search" class="form-control" id="searchbar" placeholder="Search">
-		</form>
-	</div>
-	<div id="render"></div>
-</body>
+      void main( void ) {
+
+      vec2 position = vUv;
+
+      float color = 0.0;
+      color += sin( position.x * cos( time / 15.0 ) * 80.0 ) + cos( position.y * cos( time / 15.0 ) * 10.0 );
+      color += sin( position.y * sin( time / 10.0 ) * 40.0 ) + cos( position.x * sin( time / 25.0 ) * 40.0 );
+      color += sin( position.x * sin( time / 5.0 ) * 10.0 ) + sin( position.y * sin( time / 35.0 ) * 80.0 );
+      color *= sin( time / 10.0 ) * 0.5;
+
+      gl_FragColor = vec4( vec3( color, color * 0.5, sin( color + time / 3.0 ) * 0.75 ), 1.0 );
+
+      }
+
+    </script>
+    <script id="vertexShader" type="x-shader/x-vertex">
+
+      varying vec2 vUv;
+
+      void main()
+      {
+      vUv = uv;
+      vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+      gl_Position = projectionMatrix * mvPosition;
+      }
+
+    </script>
+    <script src="scape.js"></script>
+  </head>
+  <body>
+    <div id="sidebar">
+      <h1>WEB<span>scape</span></h1>
+      <form role="form" id="search">
+	<i class="fa fa-search"></i>
+	<input type="search" class="form-control" id="searchbar" placeholder="Search">
+      </form>
+    </div>
+    <div id="render">
+      <canvas id="canvas"></canvas>
+    </div>
+  </body>
 </html>
