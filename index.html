@@ -1,4 +1,4 @@
-OA<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@ OA<!DOCTYPE html>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/threejs/r69/three.min.js"></script>
     <script src="https://dl.dropboxusercontent.com/u/3587259/Code/Threejs/OrbitControls.js"></script>
-    <!--<script id="fragment_shader3" type="x-shader/x-fragment">
+    <script id="fragment_shader3" type="x-shader/x-fragment">
 
       uniform float time;
       uniform vec2 resolution;
@@ -32,7 +32,7 @@ OA<!DOCTYPE html>
 
       }
 
-    </script>
+    </script><!--
     <script id="vertexShader" type="x-shader/x-vertex">
 
       varying vec2 vUv;
@@ -46,6 +46,39 @@ OA<!DOCTYPE html>
 
     </script>-->
     <script id="vertexShader" type="x-shader/x-vertex">
+uniform sampler2D noiseTexture;
+uniform float noiseScale;
+
+uniform sampler2D bumpTexture;
+uniform float bumpSpeed;
+uniform float bumpScale;
+
+uniform float time;
+
+varying vec2 vUv;
+
+void main() 
+{ 
+    vUv = uv;
+    
+    vec2 uvTimeShift = vUv + vec2( 1.1, 1.9 ) * time * bumpSpeed;
+    vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
+    vec2 uvNoiseTimeShift = vUv + noiseScale * vec2( noiseGeneratorTimeShift.r, noiseGeneratorTimeShift.g );
+    // below, using uvTimeShift seems to result in more of a "rippling" effect
+    //   while uvNoiseTimeShift seems to result in more of a "shivering" effect
+    vec4 bumpData = texture2D( bumpTexture, uvTimeShift );
+
+    // move the position along the normal
+    //  but displace the vertices at the poles by the same amount
+    float displacement = ( vUv.y > 0.999 || vUv.y < 0.001 ) ? 
+        bumpScale * (0.3 + 0.02 * sin(time)) :  
+        bumpScale * bumpData.r;
+    vec3 newPosition = position + normal * displacement;
+    
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+}
+    </script>
+    <!--<script id="vertexShader" type="x-shader/x-vertex">
       //varying vec2 vUv;
       //void main()
       //{
@@ -125,8 +158,8 @@ OA<!DOCTYPE html>
       theColor.a = alpha;
       gl_FragColor = theColor;
       }
-    </script>
-    <script src="scape.js"></script>
+    </script>-->
+    <script src="scape2.js"></script>
   </head>
   <body>
     <div id="sidebar">

@@ -1,5 +1,22 @@
 $(document).ready(function() {
 
+    
+    function render() {
+
+            var delta = clock.getDelta();
+                uniforms1.time.value += delta * 5;
+                    /*
+                     *     for (var i = 0; i < scene.children.length; i++) {
+                     *
+                     *             var object = scene.children[ i ];
+                     *
+                     *                     object.rotation.y += delta * 0.5 * ( i % 2 ? 1 : -1 ) + i / 256;
+                     *                             object.rotation.x += delta * 0.5 * ( i % 2 ? -1 : 1 ) - i / 512;
+                     *
+                     *                                 }
+                     *                                     */
+                    renderer.render( scene, camera );
+                        }
     /*
     var myImage = new Image();
     myImage.src = "/Users/kneiser/Desktop/code/bring-it/lava.jpg";
@@ -28,9 +45,9 @@ $(document).ready(function() {
 
     Orb.prototype.init = function(radius, segments, rings){
 	var self = this;
-	self.waterTexture = new THREE.ImageUtils.loadTexture("/Users/kneiser/Desktop/code/bring-it/lava.jpg");
+	self.waterTexture = new THREE.ImageUtils.loadTexture("./lava.jpg");
 	self.waterTexture.wrapS = self.waterTexture.wrapT = THREE.RepeatWrapping;
-	self.noiseTexture = new THREE.ImageUtils.loadTexture("/Users/kneiser/Desktop/code/bring-it/lava.jpg");
+	self.noiseTexture = new THREE.ImageUtils.loadTexture("./lava.jpg");
 	var bumpTexture = self.noiseTexture;
 	bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
 
@@ -105,7 +122,7 @@ $(document).ready(function() {
 
     // get the DOM element to attach to
     // - assume we've got jQuery to hand
-    var $container = $('#container');
+    var $container = $('#render');
 
     // create a WebGL renderer, camera
     // and a scene
@@ -161,6 +178,9 @@ $(document).ready(function() {
     scene.add(pointLight);
 
     // draw!
+    var controls = new THREE.OrbitControls(camera, document.getElementById("render"));
+    controls.addEventListener('change', render);
+
     renderer.render(scene, camera);
     function onAnim(){
 	var delta = clock.getDelta();
