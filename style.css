@@ -16,7 +16,14 @@ body{
 	padding: 5px 0;
 	position: absolute;
 	left: 0;
-	background-color: rgba(122,53,48,.7);
+	background-color: rgba(122,53,48,1);
+	opacity: .3;
+
+}
+
+.active {
+	background-color: rgba(122,53,48,.3)!important;
+	opacity: 1!important;
 }
 
 #search{
@@ -40,6 +47,7 @@ body{
 	background: transparent;
 	color: white;
 	border: none;
+	width: 100%;
 } 
 input,
 ::-webkit-input-placeholder {
@@ -73,4 +81,15 @@ h1 {
 span {
     font-family: 'Oswald', sans-serif;
     font-weight: 300;
+}
+p{
+	color: white;
+}
+
+#imgWrapper{
+	max-width: calc(100% - 34px);
+}
+
+#imgWrapper>img{
+	width: 100%;
 }
