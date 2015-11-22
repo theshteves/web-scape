@@ -1,6 +1,7 @@
 body{
 	margin: 0 auto;
-	background-color: #110923;
+	background-color: #11051C;
+	font-family: "Montserrat", sans-serif;
 }
 
 #sidebar{
@@ -8,29 +9,50 @@ body{
 	display: flex;
 	-webkit-flex-direction: column;
 	flex-direction: column;
+	-webkit-align-items: center;
+	align-items: center;
 	width: 25%;
-	height: 100%;
+	height: calc(100% - 10px);
 	padding: 5px 0;
-	opacity: 0.4;
 	position: absolute;
 	left: 0;
-	opacity: 0.7;
-	background-color: black;
+	background-color: rgba(122,53,48,.7);
 }
 
-.button{
+#search{
 	display: -webkit-flex;
 	display: flex;
-	-webkit-justify-content: center;
-	justify-content: center;
+	font-size: 16px;
+	/*-webkit-justify-content: center;
+	justify-content: center;*/
 	padding: 10px;
+	margin: 10px 5px;
+	border: solid white 2px;
 	border-radius: 25px;
+	text-align: center;
+	min-width: 150px;
+	max-height: 50px;
 	color: white;
-	background-color: black;
+	background: transparent;
 }
 
-.button>a{
+#searchbar {
+	background: transparent;
 	color: white;
+	border: none;
+} 
+input,
+::-webkit-input-placeholder {
+	font-family: "Montserrat", sans-serif;
+   	color: white;
+   	font-size: 15px;
+   	line-height: 1.25;
+}
+
+input:focus {outline: none; }
+
+#search>i{
+	margin: auto;
 }
 
 #render{

@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<title>WebScape</title>
+
+	<link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oswald:300' rel='stylesheet' type='text/css'>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/threejs/r69/three.min.js"></script>
 	<script src="scape.js"></script>
 </head>
 <body>
 	<div id="sidebar">
-		<div class="button">
-			<a href="#">google.com</a>
-		</div>
-		<div class="button">
-			<a href="#">wikipedia.com</a>
-		</div>
+		<form role="form" id="search">
+			<i class="fa fa-search"></i>
+			<input type="search" class="form-control" id="searchbar" placeholder="Search">
+		</form>
 	</div>
 	<div id="render"></div>
 </body>
