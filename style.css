@@ -269,6 +269,7 @@ p{
 	flex-direction: column;
 	-webkit-align-items: center;
 	align-items: center;
+	text-align: center;
 	width: 100%;
 	border-top: 1px solid white;
 }
