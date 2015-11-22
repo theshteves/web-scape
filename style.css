@@ -4,6 +4,28 @@ body{
 	color: white;
 	font-family: "Montserrat", sans-serif;
 	overflow: hidden;
+	height: 100%;
+}
+
+#welcome{
+	position: absolute;
+	height: 200px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	z-index: 1500;
+}
+
+#welcome>p{
+	font-size: 36px;
+	text-align: center;
+}
+
+#welcome .search{
+	width: 600px;
+	margin: auto;
 }
 
 #sidebar{
@@ -36,7 +58,7 @@ body{
 	opacity: 1!important;
 }
 
-#search{
+.search{
 	display: -webkit-flex;
 	display: flex;
 	font-size: 16px;
@@ -54,7 +76,7 @@ body{
 
 }
 
-#searchbar {
+.searchbar {
 	-webkit-appearance: none;
 	background-color: transparent;
 	color: white;
@@ -71,12 +93,16 @@ input,
 
 input:focus {outline: none; }
 
-#search>i{
+.search>i{
 	margin: auto 0;
 }
 
+.submit{
+	display: none;
+}
+
 #render{
-	height: 90%;
+	height: 100%;
 	width: 100%;
 	position: absolute;
 	right: 0;
@@ -112,7 +138,8 @@ p{
 
 /* hamburger */
 .c-hamburger {
-  display: block;
+  visibility: hidden;
+  display: inline-block;
   position: relative;
   overflow: hidden;
   margin: 0;
@@ -147,7 +174,7 @@ p{
   left: 24px;
   right: 24px;
   height: 4px;
-  background: white;
+  background-color: #fff;
 }
 
 .c-hamburger span::before,

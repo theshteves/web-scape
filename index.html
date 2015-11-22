@@ -162,13 +162,22 @@ void main()
     <script src="scape2.js"></script>
   </head>
   <body>
+    <div id="welcome">
+      <p>Welcome</p>
+      <form role="form" class="search" onsubmit="search()">
+        <i class="fa fa-search"></i>
+        <input type="search" class="form-control searchbar" placeholder="Search">
+        <input type="submit" class="submit">
+      </form>
+    </div>
     <div id="sidebar">
       
       <h1>WEB<span id="scape">scape</span></h1>
       
-      <form role="form" id="search">
+      <form role="form" class="search">
       	<i class="fa fa-search"></i>
-      	<input type="search" class="form-control" id="searchbar" placeholder="Search">
+      	<input type="search" class="form-control searchbar" placeholder="Search">
+        <input type="submit" class="submit">
       </form>
 
       <section class="site-info">
@@ -191,7 +200,6 @@ void main()
       </div>
       <canvas id="canvas"></canvas>
     </div>
-
     <script src="armadillo.js"></script>
   </body>
 
